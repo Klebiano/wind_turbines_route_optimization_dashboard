@@ -1,0 +1,4 @@
+.centeredHeaderCell span {
+    justify-content: center;
+    /* was previously -8px so not quite centered */
+}
