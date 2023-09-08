@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 // import Avatar from "@mui/material/Avatar";
-import { AddCircle, PlayCircle, Shuffle, Delete } from "@mui/icons-material";
+import {
+  AddCircle,
+  PlayCircle,
+  Shuffle,
+  Delete,
+  ClearAll,
+} from "@mui/icons-material";
 // import Typography from "@mui/material/Typography";
 // import ReactECharts from "echarts-for-react";
 import {
@@ -52,6 +58,7 @@ function Dashboard() {
   const refTurbineNameInput = useRef("");
   const refSubsystemNameInput = useRef("");
   const refFaultType = useRef("");
+  const refTurbineNumber = useRef("");
   const [openSnackbarAlert, setOpenSnackbarAlert] = useState({
     isOpen: false,
     severity: "success",
@@ -64,6 +71,40 @@ function Dashboard() {
 
   const handleCloseAlert = () => {
     setOpenSnackbarAlert({ ...openSnackbarAlert, ...{ isOpen: false } });
+  };
+
+  const RandomizeTable = () => {
+    let tempTurbineArray = turbineArray.slice();
+    let tempTableData = [];
+
+    for (let index = 0; index < refTurbineNumber.current.value; index++) {
+      const randomTurbine =
+        tempTurbineArray[Math.floor(Math.random() * tempTurbineArray.length)]
+          .turbine_name;
+
+      tempTurbineArray = tempTurbineArray
+        .filter((value) => value.turbine_name != randomTurbine)
+        .slice();
+
+      const randomSubsystem =
+        subsystemArray[Math.floor(Math.random() * subsystemArray.length)]
+          .subsystem_name;
+
+      const randomFaultType =
+        faultTypeArray[Math.floor(Math.random() * faultTypeArray.length)];
+
+      tempTableData.push({
+        turbineName: randomTurbine,
+        subsystemName: randomSubsystem,
+        faultType: randomFaultType,
+      });
+    }
+
+    setTableData(tempTableData);
+  };
+
+  const clearTableData = () => {
+    setTableData([]);
   };
 
   let windTurbineIconObj = L.icon({
@@ -289,15 +330,16 @@ function Dashboard() {
           };
         },
         customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
+          const rowIndex = tableMeta.currentTableData[tableMeta.rowIndex].index;
           return (
             <MuiTooltip title="Remove">
               <IconButton
                 onClick={(e) => {
                   // clickWalletDelete(e, tableMeta.tableData[rowIndex].walletId)
                   const turbineName = tableMeta.tableData[rowIndex].turbineName;
+                  // console.log(turbineName);
                   let tempTable = tableData.filter(
-                    (value) => value.turbineName != turbineName
+                    (value, index) => value.turbineName !== turbineName
                   );
                   setTableData(tempTable);
                 }}
@@ -316,8 +358,8 @@ function Dashboard() {
     filterType: "dropdown",
     download: false,
     print: false,
-    rowsPerPage: 50,
-    rowsPerPageOptions: false, //[10, 15, 25, 50, 100],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [], //[10, 15, 25, 50, 100],
     selectableRows: "none",
   };
 
@@ -456,7 +498,7 @@ function Dashboard() {
                       max: turbineArray.length > 0 ? turbineArray.length : 200,
                     },
                   }}
-                  // sx={{ maxWidth: "20%" }}
+                  inputRef={refTurbineNumber}
                 />
               </FormControl>
               <Button
@@ -465,6 +507,7 @@ function Dashboard() {
                 color="warning"
                 size="small"
                 sx={{ maxWidth: "20%" }}
+                onClick={RandomizeTable}
               >
                 Randomize
               </Button>
@@ -472,8 +515,27 @@ function Dashboard() {
             <Box
               sx={{
                 display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                "& > :not(style)": { m: 1, mt: 1, width: "25%" },
+              }}
+            >
+              <Button
+                variant="contained"
+                startIcon={<ClearAll />}
+                color="info"
+                size="small"
+                sx={{ maxWidth: "20%" }}
+                onClick={clearTableData}
+              >
+                Clear table
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
                 alignItems: "center",
-                "& > :not(style)": { m: 1, mt: 5, width: "100%" },
+                "& > :not(style)": { m: 1, mt: 1, width: "100%" },
               }}
             >
               <MUIDataTable
