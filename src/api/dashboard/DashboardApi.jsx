@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const fetchData = async () => {
-  return await axios.get("http://127.0.0.1:8000/get-data");
+const getTurbineMapData = async () => {
+  return await axios.get("http://127.0.0.1:8000/ant-colony/get-turbines-map");
 };
 
-export { fetchData };
+const getSubsystemData = async () => {
+  return await axios.get("http://127.0.0.1:8000/ant-colony/get-subsystems");
+};
+
+export { getTurbineMapData, getSubsystemData };

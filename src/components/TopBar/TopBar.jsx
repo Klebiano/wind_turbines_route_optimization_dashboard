@@ -63,8 +63,8 @@ const TopBar = (props) => {
                     <img
                       src={
                         theme.palette.mode === "dark"
-                          ? "/wallet-logo.png"
-                          : "/wallet-logo-white.png"
+                          ? "/wind-power-purple.png"
+                          : "/wind-power-white.png"
                       }
                       alt="voltalia logo"
                       width="33px"
