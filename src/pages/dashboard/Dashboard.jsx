@@ -6,14 +6,16 @@ import {
   Shuffle,
   Delete,
   ClearAll,
+  DeleteSweep,
 } from "@mui/icons-material";
 // import Typography from "@mui/material/Typography";
 // import ReactECharts from "echarts-for-react";
 import {
   getTurbineMapData,
   getSubsystemData,
+  runAntColonyAngorithm,
 } from "../../api/dashboard/DashboardApi";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import "leaflet/dist/leaflet.css";
 import MUIDataTable from "mui-datatables";
 import "./Styles.css";
@@ -29,6 +31,7 @@ import {
   Marker,
   Popup,
   Tooltip,
+  Polyline
 } from "react-leaflet";
 
 import {
@@ -48,7 +51,10 @@ import {
   useTheme,
   IconButton,
   Snackbar,
+  Stack,
   Tooltip as MuiTooltip,
+  Typography,
+  CircularProgress,
 } from "@mui/material";
 
 function Dashboard() {
@@ -59,6 +65,8 @@ function Dashboard() {
   const refSubsystemNameInput = useRef("");
   const refFaultType = useRef("");
   const refTurbineNumber = useRef("");
+  const [isLoadingAntColonyAlgorithm, setIsLoadingAntColonyAlgorithm] = useState(false);
+  const [mapPolylineList, setMapPolylineList] = useState([]);
   const [openSnackbarAlert, setOpenSnackbarAlert] = useState({
     isOpen: false,
     severity: "success",
@@ -73,6 +81,25 @@ function Dashboard() {
     setOpenSnackbarAlert({ ...openSnackbarAlert, ...{ isOpen: false } });
   };
 
+  const runAntColony = async () => {
+    setIsLoadingAntColonyAlgorithm(true);
+    const ant_colony_response = await runAntColonyAngorithm(tableData);
+
+    if (ant_colony_response.status !== 200) {
+      setOpenSnackbarAlert({
+        isOpen: true,
+      severity: "error",
+      snackbarAlertMessage: "Error running the ant colony algorithm!",
+      })
+    }else{
+      const response_data = ant_colony_response.data
+      let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
+      setMapPolylineList(tempPolylineList)
+    }
+    
+    setIsLoadingAntColonyAlgorithm(false);
+  }
+
   const RandomizeTable = () => {
     let tempTurbineArray = turbineArray.slice();
     let tempTableData = [];
@@ -81,6 +108,10 @@ function Dashboard() {
       const randomTurbine =
         tempTurbineArray[Math.floor(Math.random() * tempTurbineArray.length)]
           .turbine_name;
+
+      const turbineId = turbineArray.filter(
+        (value) => value.turbine_name === randomTurbine
+      )[0].turbine_id;
 
       tempTurbineArray = tempTurbineArray
         .filter((value) => value.turbine_name != randomTurbine)
@@ -94,9 +125,10 @@ function Dashboard() {
         faultTypeArray[Math.floor(Math.random() * faultTypeArray.length)];
 
       tempTableData.push({
-        turbineName: randomTurbine,
-        subsystemName: randomSubsystem,
-        faultType: randomFaultType,
+        turbine_id: turbineId,
+        turbine_name: randomTurbine,
+        subsystem_name: randomSubsystem,
+        fault_type: randomFaultType,
       });
     }
 
@@ -140,6 +172,13 @@ function Dashboard() {
     getSubsystemData().then((res) => res.data)
   );
 
+  // const runAntColony = useMutation(() => {
+  //   console.log(tableData);
+  //   // runAntColonyAngorithm(tableData);
+  //   // setModalOpen(false);
+  //   // queryClient.invalidateQueries(["walletData"]);
+  // });
+
   useEffect(() => {
     if (mapData) {
       setTurbineArray(
@@ -163,11 +202,15 @@ function Dashboard() {
     event.preventDefault();
 
     let tempTable = tableData.slice();
-    const turbineName = refTurbineNameInput.current.value;
+    const turbine_name = refTurbineNameInput.current.value;
 
     const checkIfIsAdded = tempTable.filter(
-      (value) => value.turbineName == turbineName
+      (value) => value.turbine_name == turbine_name
     );
+
+    const turbine_id = turbineArray.filter(
+      (value) => value.turbine_name === turbine_name
+    )[0].turbine_id;
 
     if (checkIfIsAdded.length > 0) {
       setOpenSnackbarAlert({
@@ -177,9 +220,10 @@ function Dashboard() {
       });
     } else {
       tempTable.push({
-        turbineName: turbineName,
-        subsystemName: refSubsystemNameInput.current.value,
-        faultType: refFaultType.current.value,
+        turbine_id: turbine_id,
+        turbine_name: turbine_name,
+        subsystem_name: refSubsystemNameInput.current.value,
+        fault_type: refFaultType.current.value,
       });
       setTableData(tempTable);
       setOpenSnackbarAlert({
@@ -256,7 +300,14 @@ function Dashboard() {
 
   const columns = [
     {
-      name: "turbineName",
+      name: "turbine_id",
+      label: "Turbine Id",
+      options: {
+        display: false,
+      },
+    },
+    {
+      name: "turbine_name",
       label: "Turbine",
       // options: {
       //   display: false,
@@ -277,7 +328,7 @@ function Dashboard() {
       },
     },
     {
-      name: "subsystemName",
+      name: "subsystem_name",
       label: "Subsystem",
       options: {
         filter: true,
@@ -295,7 +346,7 @@ function Dashboard() {
       },
     },
     {
-      name: "faultType",
+      name: "fault_type",
       label: "Fault Type",
       options: {
         filter: true,
@@ -335,11 +386,10 @@ function Dashboard() {
             <MuiTooltip title="Remove">
               <IconButton
                 onClick={(e) => {
-                  // clickWalletDelete(e, tableMeta.tableData[rowIndex].walletId)
-                  const turbineName = tableMeta.tableData[rowIndex].turbineName;
-                  // console.log(turbineName);
+                  const turbine_name =
+                    tableMeta.tableData[rowIndex].turbine_name;
                   let tempTable = tableData.filter(
-                    (value, index) => value.turbineName !== turbineName
+                    (value, index) => value.turbine_name !== turbine_name
                   );
                   setTableData(tempTable);
                 }}
@@ -555,12 +605,42 @@ function Dashboard() {
             >
               <Button
                 variant="contained"
-                startIcon={<PlayCircle />}
+                // startIcon={<PlayCircle />}
                 color="success"
                 size="small"
+                onClick={(event) => {runAntColony()}}
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-center",
+                  alignItems: "flex-center",
+                }}
               >
-                Run
+                {isLoadingAntColonyAlgorithm === true ? 
+                  <CircularProgress size="1.5rem" color="inherit" /> : 
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <PlayCircle />
+                    <Typography variant="body2">Run ants</Typography>
+                  </Stack>
+              }
               </Button>
+              {mapPolylineList.length > 0 ? 
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={(event) => {setMapPolylineList([])}}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-center",
+                    alignItems: "flex-center",
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <DeleteSweep />
+                    <Typography variant="body2">Clear Path</Typography>
+                  </Stack>
+                </Button> : ''
+              }
             </Box>
           </CardContent>
         </Card>
@@ -581,6 +661,7 @@ function Dashboard() {
                   A pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>
               </Marker> */}
+              <Polyline pathOptions={{ color: 'lime' }} positions={mapPolylineList} />
               {mapData?.map((map_point) => (
                 <Marker
                   key={map_point.turbine_id}
