@@ -57,6 +57,22 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+function weighted_random(items, weights) {
+  var i;
+
+  for (i = 1; i < weights.length; i++){
+    weights[i] += weights[i - 1];
+  }
+  
+  var random = Math.random() * weights[weights.length - 1];
+  
+  for (i = 0; i < weights.length; i++){
+    if (weights[i] > random) break;
+  }
+  
+  return items[i];
+}
+
 function Dashboard() {
   const theme = useTheme();
   const chartTheme = theme.palette.mode === "dark" ? "dark" : "westeros";
@@ -88,13 +104,22 @@ function Dashboard() {
     if (ant_colony_response.status !== 200) {
       setOpenSnackbarAlert({
         isOpen: true,
-      severity: "error",
-      snackbarAlertMessage: "Error running the ant colony algorithm!",
+        severity: "error",
+        snackbarAlertMessage: "Error running the ant colony algorithm!",
       })
     }else{
-      const response_data = ant_colony_response.data
+      const response_data = ant_colony_response.data;
+      const turbine_order = response_data.turbine_order;
+      let turbine_order_map_data = [];
+
+      turbine_order.forEach(turbine_name => {
+        const single_map_data = mapData.filter(element => element.turbine_name == turbine_name)[0]
+        turbine_order_map_data.push([single_map_data.latitude, single_map_data.longitude]);
+      });
+
       let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
-      setMapPolylineList(tempPolylineList)
+      setMapPolylineList(turbine_order_map_data)
+      console.log(response_data)
     }
     
     setIsLoadingAntColonyAlgorithm(false);
@@ -121,8 +146,7 @@ function Dashboard() {
         subsystemArray[Math.floor(Math.random() * subsystemArray.length)]
           .subsystem_name;
 
-      const randomFaultType =
-        faultTypeArray[Math.floor(Math.random() * faultTypeArray.length)];
+      const randomFaultType = weighted_random(faultTypeArray, [0.90, 0.10]);
 
       tempTableData.push({
         turbine_id: turbineId,
@@ -626,7 +650,7 @@ function Dashboard() {
               {mapPolylineList.length > 0 ? 
                 <Button
                   variant="contained"
-                  color="success"
+                  color="info"
                   size="small"
                   onClick={(event) => {setMapPolylineList([])}}
                   sx={{
@@ -637,7 +661,7 @@ function Dashboard() {
                 >
                   <Stack direction="row" alignItems="center" gap={1}>
                     <DeleteSweep />
-                    <Typography variant="body2">Clear Path</Typography>
+                    <Typography variant="body2" noWrap>Clear Results</Typography>
                   </Stack>
                 </Button> : ''
               }
@@ -653,7 +677,7 @@ function Dashboard() {
               style={{ height: "80vh", width: "100wh" }}
             >
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                //attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
               />
               {/* <Marker position={[51.505, -0.09]}>
