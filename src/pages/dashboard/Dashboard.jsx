@@ -110,6 +110,8 @@ function Dashboard() {
     }else{
       const response_data = ant_colony_response.data;
       const turbine_order = response_data.turbine_order;
+      // Back to the docks
+      // turbine_order.push(turbine_order[0])
       let turbine_order_map_data = [];
 
       turbine_order.forEach(turbine_name => {
@@ -117,9 +119,10 @@ function Dashboard() {
         turbine_order_map_data.push([single_map_data.latitude, single_map_data.longitude]);
       });
 
-      let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
+      // let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
       setMapPolylineList(turbine_order_map_data)
-      console.log(response_data)
+      // console.log(turbine_order_map_data)
+      // console.log(response_data)
     }
     
     setIsLoadingAntColonyAlgorithm(false);
@@ -686,6 +689,9 @@ function Dashboard() {
                 </Popup>
               </Marker> */}
               <Polyline pathOptions={{ color: 'lime' }} positions={mapPolylineList} />
+              {/* {mapPolylineList.length > 0 ? 
+                <Polyline pathOptions={{color: 'purple'}} positions={ [...[mapPolylineList[mapPolylineList.length - 1]], ...[mapPolylineList[0]]]} /> : ''
+              } */}
               {mapData?.map((map_point) => (
                 <Marker
                   key={map_point.turbine_id}
