@@ -10,7 +10,7 @@ import { DrawerHeader, Main } from "../DrawerHeader/DrawerHeader";
 export default function MainRoutes(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  document.title = "Ant Colony";
+  document.title = "Optimize Routes";
   
   const handleDrawerOpen = () => {
     setOpen(true);

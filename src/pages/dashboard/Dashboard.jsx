@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 // import Avatar from "@mui/material/Avatar";
 import {
   AddCircle,
@@ -7,13 +7,14 @@ import {
   Delete,
   ClearAll,
   DeleteSweep,
+  ArrowForward
 } from "@mui/icons-material";
 // import Typography from "@mui/material/Typography";
 // import ReactECharts from "echarts-for-react";
 import {
   getTurbineMapData,
   getSubsystemData,
-  runAntColonyAngorithm,
+  runRouteOptimizer,
 } from "../../api/dashboard/DashboardApi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import "leaflet/dist/leaflet.css";
@@ -81,8 +82,10 @@ function Dashboard() {
   const refSubsystemNameInput = useRef("");
   const refFaultType = useRef("");
   const refTurbineNumber = useRef("");
+  const refAlgorithm = useRef("");
   const [isLoadingAntColonyAlgorithm, setIsLoadingAntColonyAlgorithm] = useState(false);
   const [mapPolylineList, setMapPolylineList] = useState([]);
+  const [turbineOrderList, setTurbineOrderList] = useState([]);
   const [openSnackbarAlert, setOpenSnackbarAlert] = useState({
     isOpen: false,
     severity: "success",
@@ -97,19 +100,23 @@ function Dashboard() {
     setOpenSnackbarAlert({ ...openSnackbarAlert, ...{ isOpen: false } });
   };
 
-  const runAntColony = async () => {
+  const runRouteAlgorithm = async () => {
     setIsLoadingAntColonyAlgorithm(true);
-    const ant_colony_response = await runAntColonyAngorithm(tableData);
+    let algorithm = refAlgorithm.current.value;
+    const response = await runRouteOptimizer(tableData, algorithm);
 
-    if (ant_colony_response.status !== 200) {
+    if (response.status !== 200) {
       setOpenSnackbarAlert({
         isOpen: true,
         severity: "error",
-        snackbarAlertMessage: "Error running the ant colony algorithm!",
+        snackbarAlertMessage: "Error running the algorithm!",
       })
+      setIsLoadingAntColonyAlgorithm(false);
     }else{
-      const response_data = ant_colony_response.data;
+      const response_data = response.data;
       const turbine_order = response_data.turbine_order;
+      console.log(response_data)
+      const turbine_order_to_show = response_data.turbine_order_to_show;
       // Back to the docks
       // turbine_order.push(turbine_order[0])
       let turbine_order_map_data = [];
@@ -121,8 +128,7 @@ function Dashboard() {
 
       // let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
       setMapPolylineList(turbine_order_map_data)
-      // console.log(turbine_order_map_data)
-      // console.log(response_data)
+      setTurbineOrderList(turbine_order_to_show);
     }
     
     setIsLoadingAntColonyAlgorithm(false);
@@ -201,7 +207,7 @@ function Dashboard() {
 
   // const runAntColony = useMutation(() => {
   //   console.log(tableData);
-  //   // runAntColonyAngorithm(tableData);
+  //   // runRouteAlgorithm(tableData, "Genetic");
   //   // setModalOpen(false);
   //   // queryClient.invalidateQueries(["walletData"]);
   // });
@@ -435,9 +441,15 @@ function Dashboard() {
     filterType: "dropdown",
     download: false,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [], //[10, 15, 25, 50, 100],
+    rowsPerPage: 10,
+    rowsPerPageOptions: [10, 15, 25, 50, 100],
     selectableRows: "none",
+    setTableProps: () => {
+      return {
+        // material ui v4 only
+        size: 'small',
+      };
+    }
   };
 
   return (
@@ -467,7 +479,7 @@ function Dashboard() {
             //     <MoreVertIcon />
             //   </IconButton>
             // }
-            title="Ant Colony"
+            title="Optimize Routes"
             titleTypographyProps={{ variant: "h6" }}
           />
           <Divider />
@@ -578,6 +590,23 @@ function Dashboard() {
                   inputRef={refTurbineNumber}
                 />
               </FormControl>
+              <FormControl>
+                <InputLabel id="select-algorithm">Algorithm</InputLabel>
+                <Select
+                  labelId="select-algorithm"
+                  id="select-algorithm"
+                  label="Algorithm"
+                  size="small"
+                  defaultValue={"Genetic"}
+                  inputRef={refAlgorithm}
+                >
+                  {["Genetic", "Memetic", "Ant Colony"].map((algorithm, index) => (
+                    <MenuItem key={index} value={algorithm}>
+                      {algorithm}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Button
                 variant="contained"
                 startIcon={<Shuffle />}
@@ -635,7 +664,7 @@ function Dashboard() {
                 // startIcon={<PlayCircle />}
                 color="success"
                 size="small"
-                onClick={(event) => {runAntColony()}}
+                onClick={(event) => {runRouteAlgorithm()}}
                 sx={{
                   display: "flex",
                   justifyContent: "flex-center",
@@ -646,7 +675,7 @@ function Dashboard() {
                   <CircularProgress size="1.5rem" color="inherit" /> : 
                   <Stack direction="row" alignItems="center" gap={1}>
                     <PlayCircle />
-                    <Typography variant="body2">Run ants</Typography>
+                    <Typography variant="body2">Run</Typography>
                   </Stack>
               }
               </Button>
@@ -655,7 +684,7 @@ function Dashboard() {
                   variant="contained"
                   color="info"
                   size="small"
-                  onClick={(event) => {setMapPolylineList([])}}
+                  onClick={(event) => {setMapPolylineList([]); setTurbineOrderList([])}}
                   sx={{
                     display: "flex",
                     justifyContent: "flex-center",
@@ -678,6 +707,7 @@ function Dashboard() {
               zoom={11}
               scrollWheelZoom={true}
               style={{ height: "80vh", width: "100wh" }}
+              // style={{ height: "550px", width: "1000px" }}
             >
               <TileLayer
                 //attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -717,9 +747,6 @@ function Dashboard() {
             >
               Word of the Day
             </Typography>
-            <Typography variant="h5" component="div">
-              belent
-            </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               adjective
             </Typography>
@@ -728,6 +755,31 @@ function Dashboard() {
               <br />
               {'"a benevolent smile"'}
             </Typography> */}
+            <Typography fontFamily={'Segoe UI'} component="div" sx={{ mt: 2}}>
+              {turbineOrderList.map((turbine_name, index) => (
+                <Fragment key={index}>
+                  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <Box component="span" sx={{
+                        backgroundColor: '#e0e0e0', // Light gray background similar to a button
+                        borderRadius: '20px', // Rounded borders
+                        padding: '5px 8px', // Padding to look like a button
+                        marginRight: '8px', // Spacing between buttons
+                        fontSize: '13px',
+                        color: '#424242', // Darker text color
+                        border: '1px solid #bdbdbd', // Border to mimic a button
+                        cursor: "default"
+                      }}
+                    >
+                      {turbine_name}
+                    </Box>
+                    {index < turbineOrderList.length - 1 && (
+                      <ArrowForward sx={{ mx: 1, verticalAlign: 'middle'}} /> 
+                    )}
+                  </Box>
+                  {(index + 1) % 8 === 0 && <Box component="div" sx={{ mt: 1 }}></Box>}
+                </Fragment>
+              ))}
+            </Typography>
           </CardContent>
           {/* <CardActions>
             <Button size="small">Learn More</Button>

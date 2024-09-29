@@ -48,7 +48,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
 
   const sidebarList = [
     {
-      listitem: "Ant Colony",
+      listitem: "Optimize Routes",
       icon: <TimelineIcon sx={{ fontSize: 20 }} />,
       clickfunction: function () {
         navigate("/");
