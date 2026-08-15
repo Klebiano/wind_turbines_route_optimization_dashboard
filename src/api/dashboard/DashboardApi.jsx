@@ -10,11 +10,11 @@ const getSubsystemData = async () => {
 
 const runRouteOptimizer = async (data, algorithm) => {
   return await axios.post(
-    `http://127.0.0.1:8000/ant-colony/run-route-optimizer/`,
-    data=data,
+    `http://127.0.0.1:8000/ant-colony/run-route-optimizer`,
+    data,
     {
       params: {
-        algorithm: algorithm, // Lista de valores ["genetic", "memetic"]
+        algorithm: algorithm, // Lista de valores ["Genetic", "Memetic", "Ant Colony"]
       }
     }
   );

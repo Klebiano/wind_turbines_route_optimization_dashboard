@@ -176,9 +176,9 @@ function Assets() {
                 <Tooltip
                   title={
                     <div>
-                      {clickedFunction.error.message}
+                      {clickedFunction.error?.message}
                       <br />
-                      {clickedFunction.error.response.data.detail}
+                      {clickedFunction.error?.response?.data?.detail}
                     </div>
                   }
                   arrow

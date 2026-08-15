@@ -19,9 +19,11 @@ function App() {
   // const [themeMode, setThemeMode] = useState("dark");
   registerTheme("chalk-dark", chalk);
 
-  if (Object.keys(cookies).length === 0) {
-    setCookie("themeMode", "light", { path: "/" });
-  }
+  useEffect(() => {
+    if (!cookies.themeMode) {
+      setCookie("themeMode", "light", { path: "/" });
+    }
+  }, [cookies.themeMode, setCookie]);
 
   const theme = createTheme({
     palette: {

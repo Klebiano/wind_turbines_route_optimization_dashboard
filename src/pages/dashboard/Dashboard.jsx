@@ -17,6 +17,7 @@ import {
   runRouteOptimizer,
 } from "../../api/dashboard/DashboardApi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MUIDataTable from "mui-datatables";
 import "./Styles.css";
@@ -102,43 +103,50 @@ function Dashboard() {
 
   const runRouteAlgorithm = async () => {
     setIsLoadingAntColonyAlgorithm(true);
-    let algorithm = refAlgorithm.current.value;
-    const response = await runRouteOptimizer(tableData, algorithm);
+    try {
+      let algorithm = refAlgorithm.current?.value || "Genetic";
+      const response = await runRouteOptimizer(tableData, algorithm);
 
-    if (response.status !== 200) {
+      if (response && response.status === 200) {
+        const response_data = response.data;
+        const turbine_order = response_data.turbine_order || [];
+        const turbine_order_to_show = response_data.turbine_order_to_show || [];
+        let turbine_order_map_data = [];
+
+        turbine_order.forEach(turbine_name => {
+          const single_map_data = mapData?.find(element => element.turbine_name === turbine_name);
+          if (single_map_data) {
+            turbine_order_map_data.push([single_map_data.latitude, single_map_data.longitude]);
+          }
+        });
+
+        setMapPolylineList(turbine_order_map_data);
+        setTurbineOrderList(turbine_order_to_show);
+      } else {
+        setOpenSnackbarAlert({
+          isOpen: true,
+          severity: "error",
+          snackbarAlertMessage: "Error running the algorithm!",
+        });
+      }
+    } catch (error) {
       setOpenSnackbarAlert({
         isOpen: true,
         severity: "error",
-        snackbarAlertMessage: "Error running the algorithm!",
-      })
-      setIsLoadingAntColonyAlgorithm(false);
-    }else{
-      const response_data = response.data;
-      const turbine_order = response_data.turbine_order;
-      console.log(response_data)
-      const turbine_order_to_show = response_data.turbine_order_to_show;
-      // Back to the docks
-      // turbine_order.push(turbine_order[0])
-      let turbine_order_map_data = [];
-
-      turbine_order.forEach(turbine_name => {
-        const single_map_data = mapData.filter(element => element.turbine_name == turbine_name)[0]
-        turbine_order_map_data.push([single_map_data.latitude, single_map_data.longitude]);
+        snackbarAlertMessage: error.response?.data?.message || "Failed to execute optimizer endpoint!",
       });
-
-      // let tempPolylineList = mapData.filter(element => response_data.turbine_order.includes(element.turbine_name)).map(value => [value.latitude, value.longitude])
-      setMapPolylineList(turbine_order_map_data)
-      setTurbineOrderList(turbine_order_to_show);
+    } finally {
+      setIsLoadingAntColonyAlgorithm(false);
     }
-    
-    setIsLoadingAntColonyAlgorithm(false);
-  }
+  };
 
   const RandomizeTable = () => {
+    if (!turbineArray.length || !subsystemArray.length) return;
     let tempTurbineArray = turbineArray.slice();
     let tempTableData = [];
+    const count = parseInt(refTurbineNumber.current?.value || "1", 10);
 
-    for (let index = 0; index < refTurbineNumber.current.value; index++) {
+    for (let index = 0; index < count && tempTurbineArray.length > 0; index++) {
       const randomTurbine =
         tempTurbineArray[Math.floor(Math.random() * tempTurbineArray.length)]
           .turbine_name;
@@ -148,7 +156,7 @@ function Dashboard() {
       )[0].turbine_id;
 
       tempTurbineArray = tempTurbineArray
-        .filter((value) => value.turbine_name != randomTurbine)
+        .filter((value) => value.turbine_name !== randomTurbine)
         .slice();
 
       const randomSubsystem =
@@ -172,15 +180,14 @@ function Dashboard() {
     setTableData([]);
   };
 
-  let windTurbineIconObj = L.icon({
+  const windTurbineIconObj = L.icon({
     ...L.Icon.Default.prototype.options,
     iconUrl: windTurbineIcon,
     iconRetinaUrl: iconRetina,
     shadowUrl: iconShadow,
   });
-  L.Marker.prototype.options.icon = windTurbineIconObj;
 
-  let dockIconObj = L.icon({
+  const dockIconObj = L.icon({
     ...L.Icon.Default.prototype.options,
     iconUrl: dockIcon,
     iconRetinaUrl: iconRetina,
