@@ -41,6 +41,9 @@ This document serves as the long-term memory and developer reference guide for t
 
 ```
 ant_colony_vite_js/
+├── docs/                     # Documentation assets, screenshots, and demo walkthrough videos
+│   ├── images/               # UI preview screenshots
+│   └── videos/               # Demo videos
 ├── index.html                # App entry HTML template
 ├── package.json              # Project dependencies and npm scripts
 ├── vite.config.js            # Vite configuration
@@ -117,13 +120,17 @@ ant_colony_vite_js/
 # 1. Install dependencies
 npm install
 
-# 2. Start local Vite development server
+# 2. (Optional) Configure Backend API Port in .env
+# VITE_API_PORT=8000
+# VITE_API_HOST=127.0.0.1
+
+# 3. Start local Vite development server
 npm run dev
 
-# 3. Build production bundle (outputs to /dist)
+# 4. Build production bundle (outputs to /dist)
 npm run build
 
-# 4. Preview local production build
+# 5. Preview local production build
 npm run preview
 ```
 
@@ -135,7 +142,7 @@ npm run preview
    - React components using JSX syntax must use the `.jsx` file extension.
    - Utility scripts or theme configurations use `.js`.
 2. **API Separation**:
-   - All Axios endpoints and HTTP communication are encapsulated within domain-specific service files under `src/api/<feature>/`. Components interact with API calls using React Query hooks (`useQuery` / `useMutation`).
+   - All Axios endpoints and HTTP communication are encapsulated within domain-specific service files under `src/api/<feature>/`, utilizing the centralized Axios instance from `src/api/config.js`. Components interact with API calls using React Query hooks (`useQuery` / `useMutation`).
 3. **MUI System Styling**:
    - Layouts heavily utilize MUI v5 layout primitives (`Grid`, `Box`, `Stack`, `Card`, `FormControl`).
    - Page-specific custom styles live in standard `Styles.css` files adjacent to their page components.
@@ -143,7 +150,7 @@ npm run preview
    - Component transient state uses standard React hooks (`useState`, `useRef`).
    - Server state caching and invalidation rely on `@tanstack/react-query` query keys (e.g., `["mapData"]`, `["assetsData"]`).
 5. **Backend Dependency**:
-   - Endpoints in `src/api/` target `http://127.0.0.1:8000`. Keep API URL signatures consistent when adding new features or connecting environment configurations.
+   - Endpoints in `src/api/` target `http://127.0.0.1:8000` by default, configurable via `VITE_API_PORT`, `VITE_API_HOST`, or `VITE_API_URL` environment variables in `.env`. Keep API URL signatures consistent when adding new features or connecting environment configurations.
 
 ---
 

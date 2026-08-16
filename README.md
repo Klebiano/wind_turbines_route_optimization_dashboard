@@ -13,6 +13,15 @@ An interactive, high-performance web dashboard built with **React** and **Vite**
 
 ## 📸 Screenshots & Previews
 
+### Optimize Routes Dashboard Walkthrough
+Demonstration showing route parameter configuration, turbine randomization, optimization execution across metaheuristic algorithms, and real-time geospatial path rendering:
+
+https://github.com/user-attachments/assets/ (or open locally: [Demo Video](./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4))
+
+<video src="./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4" controls width="100%">
+  Your browser does not support the video tag.
+</video>
+
 ### Optimize Routes Dashboard (Live Application)
 Full view of the route optimization pipeline: parameter selection, dynamic data table with turbine fault details, interactive satellite map with the computed shortest route polyline, and the ordered execution sequence:
 
@@ -83,7 +92,20 @@ Ensure you have the following installed on your machine:
    npm install
    ```
 
-3. **Start the local development server**:
+3. **Configure the Backend API Port (Optional)**:
+   The application defaults to `http://127.0.0.1:8000`. If your backend API is running on a different port or host, copy `.env.example` to `.env` (or `.env.local`) and adjust the port:
+   ```bash
+   cp .env.example .env
+   ```
+   Inside `.env`:
+   ```env
+   VITE_API_PORT=8000
+   VITE_API_HOST=127.0.0.1
+   # Or provide a full custom URL:
+   # VITE_API_URL=http://localhost:8000
+   ```
+
+4. **Start the local development server**:
    ```bash
    npm run dev
    ```
@@ -107,8 +129,9 @@ In the project directory, you can run:
 
 ```text
 ant_colony_vite_js/
-├── docs/                     # Documentation assets and screenshots
-│   └── images/               # UI preview screenshots for README
+├── docs/                     # Documentation assets, screenshots, and demo videos
+│   ├── images/               # UI preview screenshots for README
+│   └── videos/               # Application walkthrough and demo videos
 ├── public/                   # Static assets (custom map markers, icons)
 │   ├── dock-white.png        # Dock station marker icon
 │   ├── wind-power-yellow.png # Wind turbine marker icon

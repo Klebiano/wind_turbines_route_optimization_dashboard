@@ -1,15 +1,15 @@
-import axios from "axios";
+import apiClient from "../config";
 
 const getWalletData = async ({ queryKey }) => {
-  const res = await axios.get(
-    `http://127.0.0.1:8000/users/${queryKey[1].userId}/wallets/`
+  const res = await apiClient.get(
+    `/users/${queryKey[1].userId}/wallets/`
   );
   return res.data;
 };
 
 const createWallet = async (data) => {
-  return await axios.post(
-    `http://127.0.0.1:8000/users/${data.userId}/wallets/`,
+  return await apiClient.post(
+    `/users/${data.userId}/wallets/`,
     {
       ...data.walletData,
     }
@@ -17,8 +17,8 @@ const createWallet = async (data) => {
 };
 
 const deleteWallet = async (data) => {
-  return await axios.delete(
-    `http://127.0.0.1:8000/users/${data.userId}/wallets/${data.walletId}`
+  return await apiClient.delete(
+    `/users/${data.userId}/wallets/${data.walletId}`
   );
 };
 
