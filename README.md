@@ -1,4 +1,4 @@
-# 🐜 Wind Turbine Route Optimization Dashboard
+# Wind Turbine Route Optimization Dashboard
 
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.21-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
