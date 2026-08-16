@@ -106,7 +106,10 @@ ant_colony_vite_js/
 ### Prerequisites
 * **Node.js**: v16+ or v18+ recommended
 * **npm**: v8+ package manager
-* **Backend API**: Python / FastAPI server running on `http://127.0.0.1:8000`
+* **Backend API**: Route optimization API server running on `http://127.0.0.1:8000`. Compatible backends include:
+  * [ant_colony_fast_api_backend](https://github.com/Klebiano/ant_colony_fast_api_backend) (Python / FastAPI)
+  * [ant_colony_golang_rust_backend](https://github.com/Klebiano/ant_colony_golang_rust_backend) (Go / Rust)
+
 
 ### Setup & Commands
 
@@ -141,3 +144,31 @@ npm run preview
    - Server state caching and invalidation rely on `@tanstack/react-query` query keys (e.g., `["mapData"]`, `["assetsData"]`).
 5. **Backend Dependency**:
    - Endpoints in `src/api/` target `http://127.0.0.1:8000`. Keep API URL signatures consistent when adding new features or connecting environment configurations.
+
+---
+
+## 7. Connected Repositories & Academic Research
+
+### Backend Ecosystem
+* **Python / FastAPI Engine**: [`ant_colony_fast_api_backend`](https://github.com/Klebiano/ant_colony_fast_api_backend)
+  * Implements REST API endpoints with FastAPI, pandas data pipelines, PostgreSQL storage, and metaheuristic solvers (Ant Colony Optimization, Genetic Algorithms, Memetic Algorithms).
+* **Go / Rust Engine**: [`ant_colony_golang_rust_backend`](https://github.com/Klebiano/ant_colony_golang_rust_backend)
+  * High-performance parallelized backend for computationally intensive metaheuristic combinatorial optimization.
+
+### Academic Publications & Monographs
+The theoretical foundations, mathematical formulations, and experimental evaluations are published in the monographs stored in the [`/PDF`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF) folder:
+
+#### 1. UFERSA Electrical Engineering Capstone (2023)
+* **Title**: *Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso*
+* **Authors**: Klebiano Kennedy da Silva Lima, Matheus da Silva Menezes
+* **Institution**: Universidade Federal Rural do Semi-Árido (UFERSA), Campus Mossoró
+* **File**: [`PDF/Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20plataforma%20WEB%20para%20planejamento%20de%20rotas%20na%20manuten%C3%A7%C3%A3o%20de%20parques%20e%C3%B3licos%20offshore%20utilizando%20algoritmo%20da%20otimiza%C3%A7%C3%A3o%20da%20col%C3%B4nia%20de%20formigas:%20Estudo%20de%20Caso%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
+* **ABNT**: `LIMA, Klebiano Kennedy da Silva; MENEZES, Matheus da Silva. Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso. 2023. 13 f. Trabalho de Conclusão de Curso (Graduação em Engenharia Elétrica) – Universidade Federal Rural do Semi-Árido (UFERSA), Mossoró, 2023.`
+
+#### 2. MBA Data Science & Analytics Capstone (2024)
+* **Title**: *Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos*
+* **Authors**: Klebiano Kennedy da Silva Lima, Abdoulaye Aboubacari Mohamed
+* **Program**: Especialização em MBA em Data Science e Analytics
+* **File**: [`PDF/Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20uma%20Plataforma%20Web%20para%20Otimiza%C3%A7%C3%A3o%20de%20Rotas%20de%20Manuten%C3%A7%C3%A3o%20em%20Parques%20E%C3%B3licos%20Offshore%20Utilizando%20M%C3%A9todos%20Meta-heur%C3%ADsticos%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
+* **ABNT**: `LIMA, Klebiano Kennedy da Silva; MOHAMED, Abdoulaye Aboubacari. Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos. 2024. 16 f. Trabalho de Conclusão de Curso (Especialização em MBA em Data Science e Analytics) – 2024.`
+

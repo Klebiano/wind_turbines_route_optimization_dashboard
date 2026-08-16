@@ -67,7 +67,8 @@ Full view of the route optimization pipeline: parameter selection, dynamic data 
 Ensure you have the following installed on your machine:
 - **Node.js**: `v18.0.0` or later
 - **npm**: `v8.0.0` or later (or `yarn` / `pnpm`)
-- **Backend Optimization API**: A running instance of the route optimization backend API (typically running on `http://127.0.0.1:8000`).
+- **Backend Optimization API**: A running instance of the route optimization backend API (typically running on `http://127.0.0.1:8000`). You can use either the [FastAPI Backend](https://github.com/Klebiano/ant_colony_fast_api_backend) or the [Go/Rust Backend](https://github.com/Klebiano/ant_colony_golang_rust_backend).
+
 
 ### Installation
 
@@ -163,6 +164,68 @@ flowchart TD
 
 ---
 
+## 🔗 Backend Repositories & Ecosystem
+
+This frontend dashboard communicates with specialized route optimization backend engines:
+
+* 🐍 **Python / FastAPI Backend**: [ant_colony_fast_api_backend](https://github.com/Klebiano/ant_colony_fast_api_backend)
+  * REST API developed with Python and FastAPI that serves geospatial wind turbine data and implements the Ant Colony Optimization (ACO), Genetic Algorithm (GA), and Memetic Algorithm (MA) route optimization solvers.
+* ⚡ **Go & Rust Backend**: [ant_colony_golang_rust_backend](https://github.com/Klebiano/ant_colony_golang_rust_backend)
+  * High-performance backend engine developed in Golang and Rust designed for high-concurrency computation, parallelized metaheuristic simulations, and accelerated route planning calculations.
+
+---
+
+## 📚 Academic Publications & Citations
+
+This project is part of academic research on route planning and maintenance optimization for offshore wind farms using metaheuristics. The research papers and monographs detailing the mathematical formulation, algorithmic parameters, and benchmarking are available in the [`/PDF`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF) folder:
+
+### 1. Ant Colony Optimization (ACO) Study (UFERSA 2023)
+* **Title**: *Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso*
+* **Authors**: Klebiano Kennedy da Silva Lima, Matheus da Silva Menezes
+* **Institution**: Universidade Federal Rural do Semi-Árido (UFERSA) – Mossoró, RN, Brasil
+* **Document**: [`PDF/Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20plataforma%20WEB%20para%20planejamento%20de%20rotas%20na%20manuten%C3%A7%C3%A3o%20de%20parques%20e%C3%B3licos%20offshore%20utilizando%20algoritmo%20da%20otimiza%C3%A7%C3%A3o%20da%20col%C3%B4nia%20de%20formigas:%20Estudo%20de%20Caso%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
+
+#### ABNT Citation
+```text
+LIMA, Klebiano Kennedy da Silva; MENEZES, Matheus da Silva. Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso. 2023. 13 f. Trabalho de Conclusão de Curso (Graduação em Engenharia Elétrica) – Universidade Federal Rural do Semi-Árido (UFERSA), Mossoró, 2023.
+```
+
+#### BibTeX
+```bibtex
+@monography{lima2023desenvolvimento,
+  title={Desenvolvimento de plataforma WEB para planejamento de rotas na manuten{\c{c}}{\~a}o de parques e{\'o}licos offshore utilizando algoritmo da otimiza{\c{c}}{\~a}o da col{\^o}nia de formigas: Estudo de Caso},
+  author={Lima, Klebiano Kennedy da Silva and Menezes, Matheus da Silva},
+  year={2023},
+  type={Trabalho de Conclus{\~a}o de Curso (Gradua{\c{c}}{\~a}o em Engenharia El{\'e}trica)},
+  school={Universidade Federal Rural do Semi-{\'A}rido (UFERSA)},
+  address={Mossor{\'o}, RN, Brasil}
+}
+```
+
+### 2. Metaheuristics (GA & MA) Optimization Study (2024)
+* **Title**: *Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos*
+* **Authors**: Klebiano Kennedy da Silva Lima, Abdoulaye Aboubacari Mohamed
+* **Program**: MBA em Data Science e Analytics – 2024
+* **Document**: [`PDF/Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20uma%20Plataforma%20Web%20para%20Otimiza%C3%A7%C3%A3o%20de%20Rotas%20de%20Manuten%C3%A7%C3%A3o%20em%20Parques%20E%C3%B3licos%20Offshore%20Utilizando%20M%C3%A9todos%20Meta-heur%C3%ADsticos%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
+
+#### ABNT Citation
+```text
+LIMA, Klebiano Kennedy da Silva; MOHAMED, Abdoulaye Aboubacari. Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos. 2024. 16 f. Trabalho de Conclusão de Curso (Especialização em MBA em Data Science e Analytics) – 2024.
+```
+
+#### BibTeX
+```bibtex
+@monography{lima2024metaheuristicos,
+  title={Desenvolvimento de uma Plataforma Web para Otimiza{\c{c}}{\~a}o de Rotas de Manuten{\c{c}}{\~a}o em Parques E{\'o}licos Offshore Utilizando M{\'e}todos Meta-heur{\'\i}sticos},
+  author={Lima, Klebiano Kennedy da Silva and Mohamed, Abdoulaye Aboubacari},
+  year={2024},
+  type={Trabalho de Conclus{\~a}o de Curso (MBA em Data Science e Analytics)},
+  note={Monografia de Especializa{\c{c}}{\~a}o}
+}
+```
+
+---
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
@@ -178,3 +241,4 @@ Contributions, issues, and feature requests are welcome!
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
