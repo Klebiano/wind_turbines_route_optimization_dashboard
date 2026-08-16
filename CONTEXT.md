@@ -41,9 +41,8 @@ This document serves as the long-term memory and developer reference guide for t
 
 ```
 ant_colony_vite_js/
-├── docs/                     # Documentation assets, screenshots, and demo walkthrough videos
-│   ├── images/               # UI preview screenshots
-│   └── videos/               # Demo videos
+├── docs/                     # Documentation assets, screenshots, and walkthrough previews
+│   └── images/               # UI preview screenshots and animations
 ├── index.html                # App entry HTML template
 ├── package.json              # Project dependencies and npm scripts
 ├── vite.config.js            # Vite configuration

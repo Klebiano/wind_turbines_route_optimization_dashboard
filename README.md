@@ -18,8 +18,6 @@ Demonstration showing route parameter configuration, turbine randomization, opti
 
 ![Optimize Routes Dashboard Walkthrough](./docs/images/demo.gif)
 
-> 📹 **High Definition Video**: [▶️ Watch full 1080p MP4 walkthrough](./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4)
-
 ### Optimize Routes Dashboard (Live Application)
 Full view of the route optimization pipeline: parameter selection, dynamic data table with turbine fault details, interactive satellite map with the computed shortest route polyline, and the ordered execution sequence:
 
@@ -127,9 +125,8 @@ In the project directory, you can run:
 
 ```text
 ant_colony_vite_js/
-├── docs/                     # Documentation assets, screenshots, and demo videos
-│   ├── images/               # UI preview screenshots for README
-│   └── videos/               # Application walkthrough and demo videos
+├── docs/                     # Documentation assets and screenshots
+│   └── images/               # UI preview screenshots and demo walkthrough animation
 ├── public/                   # Static assets (custom map markers, icons)
 │   ├── dock-white.png        # Dock station marker icon
 │   ├── wind-power-yellow.png # Wind turbine marker icon
