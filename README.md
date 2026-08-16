@@ -16,11 +16,9 @@ An interactive, high-performance web dashboard built with **React** and **Vite**
 ### Optimize Routes Dashboard Walkthrough
 Demonstration showing route parameter configuration, turbine randomization, optimization execution across metaheuristic algorithms, and real-time geospatial path rendering:
 
-https://github.com/user-attachments/assets/ (or open locally: [Demo Video](./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4))
+![Optimize Routes Dashboard Walkthrough](./docs/images/demo.gif)
 
-<video src="./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4" controls width="100%">
-  Your browser does not support the video tag.
-</video>
+> 📹 **High Definition Video**: [▶️ Watch full 1080p MP4 walkthrough](./docs/videos/Demo%20-%20Wind%20Turbine%20Route%20Optimization%20Dashboard.mp4)
 
 ### Optimize Routes Dashboard (Live Application)
 Full view of the route optimization pipeline: parameter selection, dynamic data table with turbine fault details, interactive satellite map with the computed shortest route polyline, and the ordered execution sequence:
