@@ -177,13 +177,12 @@ This frontend dashboard communicates with specialized route optimization backend
 
 ## 📚 Academic Publications & Citations
 
-This project is part of academic research on route planning and maintenance optimization for offshore wind farms using metaheuristics. The research papers and monographs detailing the mathematical formulation, algorithmic parameters, and benchmarking are available in the [`/PDF`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF) folder:
+This project is part of academic research on route planning and maintenance optimization for offshore wind farms using metaheuristic algorithms. The theoretical foundations, mathematical formulations, and benchmarking studies are detailed in the following research monographs:
 
 ### 1. Ant Colony Optimization (ACO) Study (UFERSA 2023)
 * **Title**: *Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso*
 * **Authors**: Klebiano Kennedy da Silva Lima, Matheus da Silva Menezes
 * **Institution**: Universidade Federal Rural do Semi-Árido (UFERSA) – Mossoró, RN, Brasil
-* **Document**: [`PDF/Desenvolvimento de plataforma WEB para planejamento de rotas na manutenção de parques eólicos offshore utilizando algoritmo da otimização da colônia de formigas: Estudo de Caso - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20plataforma%20WEB%20para%20planejamento%20de%20rotas%20na%20manuten%C3%A7%C3%A3o%20de%20parques%20e%C3%B3licos%20offshore%20utilizando%20algoritmo%20da%20otimiza%C3%A7%C3%A3o%20da%20col%C3%B4nia%20de%20formigas:%20Estudo%20de%20Caso%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
 
 #### ABNT Citation
 ```text
@@ -206,7 +205,7 @@ LIMA, Klebiano Kennedy da Silva; MENEZES, Matheus da Silva. Desenvolvimento de p
 * **Title**: *Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos*
 * **Authors**: Klebiano Kennedy da Silva Lima, Abdoulaye Aboubacari Mohamed
 * **Program**: MBA em Data Science e Analytics – 2024
-* **Document**: [`PDF/Desenvolvimento de uma Plataforma Web para Otimização de Rotas de Manutenção em Parques Eólicos Offshore Utilizando Métodos Meta-heurísticos - TCC - Klebiano Kennedy.pdf`](file:///home/klebs/Documentos/ant_colony_vite_js/PDF/Desenvolvimento%20de%20uma%20Plataforma%20Web%20para%20Otimiza%C3%A7%C3%A3o%20de%20Rotas%20de%20Manuten%C3%A7%C3%A3o%20em%20Parques%20E%C3%B3licos%20Offshore%20Utilizando%20M%C3%A9todos%20Meta-heur%C3%ADsticos%20-%20TCC%20-%20Klebiano%20Kennedy.pdf)
+
 
 #### ABNT Citation
 ```text
